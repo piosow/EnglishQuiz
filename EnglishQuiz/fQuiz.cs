@@ -26,11 +26,20 @@ namespace EnglishQuiz
         public fQuiz(Category currentCategory,ref Player currentPlayer, int size = 10)
         {
             InitializeComponent();
+            this.Text = $"Kategoria quizu: {currentCategory.CategoryName}";
             Player = currentPlayer;
+            SetupPlayer();   
             maxQuestions = size;
             
-            GenerateQuiz(currentCategory, Player, size);
+            GenerateQuiz(currentCategory, size);
             SetupControls();
+        }
+
+        private void SetupPlayer()
+        {
+            Player.Count++;
+            Player.CurrentCorrectAnswers = 0;
+            Player.CurrentWrongAnswers = 0;
         }
 
         private void UpdatePlayerStatus()
@@ -39,12 +48,17 @@ namespace EnglishQuiz
             if (selection.Text.Equals(ListOfQuestions.Where(w => w.QuestionNumber == currentQuestion).Select(s => s.CorrectAnswer).First()))
             {
                 Player.CorrectAnswers++;
+                Player.CurrentCorrectAnswers++;
             }
-            else Player.WrongAnswers++;
+            else
+            {
+                Player.WrongAnswers++;
+                Player.CurrentWrongAnswers++;
+            }
             selection.Checked = false;
         }
 
-        private void GenerateQuiz(Category curCat, Player player, int questionsAmount)
+        private void GenerateQuiz(Category curCat, int questionsAmount)
         {
             QuestionClass qc = new QuestionClass();
             qc.GenerateQuestions(questionsAmount, curCat);

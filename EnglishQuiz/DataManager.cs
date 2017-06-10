@@ -16,8 +16,15 @@ namespace EnglishQuiz
 
         public static void Setup()
         {
-            GetFilePaths();
-            CreateQuizCategories();
+            try
+            {
+                GetFilePaths();
+                CreateQuizCategories();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         private static void GetFilePaths()
         {
@@ -58,7 +65,6 @@ namespace EnglishQuiz
             }
             
         }
-
         private static DataTable GetDataTableFromExcel(string path)
         {
             try
@@ -89,22 +95,30 @@ namespace EnglishQuiz
             }
             
         }
-
         private static Category CreateCategory(DataTable dt, string categoryName)
         {
-            Category cat = new Category();
-            cat.CategoryName = categoryName;
-            foreach (DataRow r in dt.Rows)
+            try
             {
-                cat.CategoryItems.Add(
-                    new CategoryItem
-                    {
-                        Id = int.Parse(r[0].ToString())
-                        ,PolishWord = r[1].ToString().ToLower()
-                        ,EnglishWord = r[2].ToString().ToLower()
-                    });
+                Category cat = new Category();
+                cat.CategoryName = categoryName;
+                foreach (DataRow r in dt.Rows)
+                {
+                    cat.CategoryItems.Add(
+                        new CategoryItem
+                        {
+                            Id = int.Parse(r[0].ToString())
+                            ,
+                            PolishWord = r[1].ToString().ToLower()
+                            ,
+                            EnglishWord = r[2].ToString().ToLower()
+                        });
+                }
+                return cat;
             }
-            return cat;
+            catch (Exception ex)
+            {
+                throw new Exception("Utworzenie kategorii.", ex);
+            }
         }
     }
 }

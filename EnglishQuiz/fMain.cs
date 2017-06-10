@@ -15,13 +15,18 @@ namespace EnglishQuiz
         public Player CurrentPlayer = new Player();
         public fMain()
         {
-            InitializeComponent();
-            DataManager.Setup();
-            FillListBox();
-            QuestionClass aa = new QuestionClass();
-            aa.GenerateQuestions(10, DataManager.QuizCategories.First());
-            
-            //QuestionClass aa = new QuestionClass(DataManager.QuizCategories.First(), 1);
+            try
+            {
+                InitializeComponent();
+                DataManager.Setup();
+                FillListBox();
+                QuestionClass aa = new QuestionClass();
+                aa.GenerateQuestions(10, DataManager.QuizCategories.First());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ładowanie głównej formatki.", ex);
+            }
         }
 
         private void fMain_Load(object sender, EventArgs e)
@@ -46,7 +51,6 @@ namespace EnglishQuiz
         private Category GetSelectedCategory()
         {
             string name = lbCategories.SelectedItem.ToString();
-            
             return DataManager.QuizCategories.FirstOrDefault(f => f.CategoryName == name);
         }
 
@@ -101,6 +105,11 @@ namespace EnglishQuiz
                 {
                     MessageBox.Show(message);
                 }
+                else
+                {
+                    GeneratePlayer();
+                }
+
                 return validation;
             }
             catch (Exception ex)

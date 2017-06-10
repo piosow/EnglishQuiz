@@ -9,8 +9,23 @@ namespace EnglishQuiz
     public  class Player
     {
         public  string Nick { get; set; }
+
+        public int Count { get; set; }
+
+        public int CurrentCorrectAnswers { get; set; }
+        public int CurrentWrongAnswers { get; set; }
+        public int CurrentQuestionsCount
+        {
+            get
+            {
+                return CurrentCorrectAnswers + CurrentWrongAnswers;
+            }
+        }
+
         public  int CorrectAnswers { get; set; }
+
         public  int WrongAnswers { get; set; }
+
         public int QuestionsCount
         {
             get
@@ -32,7 +47,15 @@ namespace EnglishQuiz
                 return ((decimal)CorrectAnswers / (decimal)QuestionsCount) * 100m;
             }
         }
-        
+
+        public decimal CurrentPercentage
+        {
+            get
+            {
+                return ((decimal)CurrentCorrectAnswers / (decimal)CurrentQuestionsCount) * 100m;
+            }
+        }
+
         public Player()
         {
 
@@ -41,6 +64,7 @@ namespace EnglishQuiz
         public Player(string nick)
         {
             Nick = nick;
+            Count = 0;
         }
 
         public void Success()
@@ -101,20 +125,23 @@ namespace EnglishQuiz
                 {
                     return "100% kozak!";
                 }
-
             }
         }
 
         public override string ToString()
         {
             string message = "";
-            message += $"Gracz: {Nick}\n";
+            message += $"\t{Nick}\n";
+            message += $"\nObecny quiz:\n";
+            message += $"Poprawnych odpowiedzi: {CurrentCorrectAnswers}\n";
+            message += $"Błędnych odpowiedzi: {CurrentWrongAnswers}\n";
+            message += $"\nSkuteczność: {CurrentPercentage.ToString("F")}%";
+            message += $"\n\nOgólnie ({Count}):\n";
             message += $"Poprawnych odpowiedzi: {CorrectAnswers}\n";
             message += $"Błędnych odpowiedzi: {WrongAnswers}\n";
             message += $"\nSkuteczność: {Percentage.ToString("F")}%";
-            message += $"\n\n{PlayerRank}";
+            message += $"\n\n{PlayerRank}\n";
             return message;
         }
-
     }
 }
